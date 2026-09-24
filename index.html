@@ -39,7 +39,6 @@ ul.scope{list-style:none;}
 ul.scope li{font-size:12.8px;line-height:1.5;padding:5px 0 5px 22px;color:#333d52;position:relative;}
 ul.scope li::before{content:"";position:absolute;left:0;top:9px;width:13px;height:13px;border-radius:50%;background:var(--ok-bg);border:1px solid #9fd8c0;}
 ul.scope li::after{content:"";position:absolute;left:4px;top:12px;width:5px;height:3px;border-left:1.6px solid var(--ok);border-bottom:1.6px solid var(--ok);transform:rotate(-45deg);}
-/* 凭证分组 */
 .doc-group{margin-bottom:14px;}
 .doc-group:last-child{margin-bottom:2px;}
 .doc-group .gt{font-size:12px;font-weight:700;color:#445; margin:0 0 8px 2px;}
@@ -56,7 +55,6 @@ ul.scope li::after{content:"";position:absolute;left:4px;top:12px;width:5px;heig
 .foot{padding:18px 20px 26px;text-align:center;}
 .foot p{font-size:10.8px;color:var(--mut);line-height:1.7;}
 .foot .seal{font-size:11px;color:var(--navy);font-weight:600;margin-bottom:6px;}
-/* 灯箱 */
 .lb{position:fixed;inset:0;z-index:99;background:rgba(8,10,16,.94);display:flex;flex-direction:column;}
 .lb[hidden]{display:none;}
 .lb-top{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;color:#cdd3df;font-size:12px;}
@@ -74,12 +72,11 @@ ul.scope li::after{content:"";position:absolute;left:4px;top:12px;width:5px;heig
 <body>
 <div class="wrap">
   <div class="top">
-    <div class="lg"><img src="LOGO_BASE64_PLACEHOLDER" alt="中盛集团LOGO"></div>
+    <div class="lg"><img src="LOGO_DATAURI" alt="中盛集团LOGO"></div>
     <div class="cn">中盛（镇江）新能源有限公司<small>授权业务代表 · 信息核验</small></div>
   </div>
   <div id="app"></div>
 </div>
-
 <div id="lb" class="lb" hidden>
   <div class="lb-top"><span id="lb-cnt"></span><button class="lb-x" id="lb-x" aria-label="关闭">✕</button></div>
   <div class="lb-mid">
@@ -89,17 +86,9 @@ ul.scope li::after{content:"";position:absolute;left:4px;top:12px;width:5px;heig
   </div>
   <div class="lb-bot"><div class="cap" id="lb-cap"></div><a id="lb-orig" href="#" target="_blank" rel="noopener">查看原图（可手势放大）</a></div>
 </div>
-
 <script>
-/* ============================================================
-   可配置项（调整授权期限只需改下面两个日期，格式 YYYY-MM-DD）
-   - VALID_FROM：授权生效日（当天 00:00 起生效）
-   - VALID_TO  ：授权到期日（当天仍有效，次日 00:00 起显示“授权已过期”）
-   ============================================================ */
 var VALID_FROM = "2026-09-24";
 var VALID_TO   = "2027-12-31";
-
-/* ===== 授权代表数据（新增人员在此添加一条；二维码用 #编号 区分，一人一码） ===== */
 var REPS = {
   "SD-2027-0001": {
     name:"张　明", role:"客户经理", region:"江苏省",
@@ -111,16 +100,9 @@ var REPS = {
     ]
   }
 };
-var COMPANY = {
-  code:"91321112MA260HAW86",
-  reg:"江苏电力交易中心 苏电注册公告2025-129号"
-};
-
-/* ===== 资质与凭证（图片在仓库根目录；分组展示，点击看大图） ===== */
+var COMPANY = { code:"91321112MA260HAW86", reg:"江苏电力交易中心 苏电注册公告2025-129号" };
 var DOCS = [
-  { group:"营业执照", items:[
-    {src:"cert-license.jpg", t:"营业执照（中盛（镇江）新能源有限公司）"}
-  ]},
+  { group:"营业执照", items:[ {src:"cert-license.jpg", t:"营业执照（中盛（镇江）新能源有限公司）"} ]},
   { group:"售电公司市场注册凭证", items:[
     {src:"cert-zizhi-1.jpg", t:"苏电注册公告2025-129号 · 公示结果通知（正文）"},
     {src:"cert-zizhi-2.jpg", t:"公示结果通知（落款 · 交易中心盖章）"},
@@ -131,20 +113,16 @@ var DOCS = [
     {src:"cert-hanhan-2.jpg", t:"履约保函（续页 · 江苏银行盖章）"}
   ]}
 ];
-
 function el(html){var d=document.createElement("div");d.innerHTML=html;return d.firstChild;}
 function esc(s){return String(s).replace(/[<>&"]/g,function(c){return {"<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;"}[c];});}
-function svgs(){
-  return {
-    check:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
-    cross:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M7 7l10 10M17 7L7 17"/></svg>',
-    clock:'<svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>'
-  };
-}
+function svgs(){return {
+  check:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  cross:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M7 7l10 10M17 7L7 17"/></svg>',
+  clock:'<svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>'
+};}
 function day(s){return new Date(s+"T00:00:00");}
 function today0(){var d=new Date();d.setHours(0,0,0,0);return d;}
 function demoState(){var m=location.search.match(/[?&]demo=([a-z]+)/);return m?m[1]:"";}
-/* 状态：valid 有效 / notyet 未生效 / expired 已过期 */
 function stateOf(){
   var dm=demoState();
   if(dm==="expired")return "expired";
@@ -154,35 +132,26 @@ function stateOf(){
   if(t>day(VALID_TO))return "expired";
   return "valid";
 }
-
 function render(){
   var app=document.getElementById("app"); app.innerHTML="";
   var id=location.hash?location.hash.slice(1):"SD-2027-0001";
   var r=REPS[id]; var I=svgs();
-
-  /* 编号不存在 / 授权被停用 */
   if(!r || r.status!=="active"){
     app.appendChild(el('<div class="banner bad"><div class="ico">'+I.cross+'</div><div class="st">未查询到有效授权</div><div class="ds">该证件编号不存在或授权已终止/失效<br>编号：'+esc(id)+'</div></div>'));
     app.appendChild(el('<div class="card"><h3>温馨提示</h3><div style="font-size:12.6px;line-height:1.7;color:#6f4d1e;">请谨慎与该人员开展业务。我司主体及售电资质可通过国家企业信用信息公示系统、江苏电力交易中心公示查询核实。</div></div>'));
     foot(app); return;
   }
-
   var st=stateOf();
-
-  /* 已过期：只显示过期横幅，隐藏全部证书内容 */
   if(st==="expired"){
     app.appendChild(el('<div class="banner bad"><div class="ico">'+I.cross+'</div><div class="st">授权已过期</div><div class="ds">该授权有效期为 '+esc(r.valid)+'<br>现已超过有效期，授权自动失效<br>编号：'+esc(id)+'</div></div>'));
     app.appendChild(el('<div class="card"><h3>温馨提示</h3><div style="font-size:12.6px;line-height:1.7;color:#6f4d1e;">该证件已失效，不能再用于业务接洽。如需核实或续期，请通过国家企业信用信息公示系统、江苏电力交易中心等正规渠道与我司联系。</div></div>'));
     foot(app); return;
   }
-
-  /* 有效（含未生效提示，未生效时仍展示信息但置顶提醒） */
-  if(st==="notyet"){
+  if(st=="notyet"){
     app.appendChild(el('<div class="banner warn"><div class="ico">'+I.clock+'</div><div class="st">授权尚未生效</div><div class="ds">本授权自 '+VALID_FROM.replace(/-/g,".")+' 起生效<br>编号：'+esc(id)+'</div></div>'));
   }else{
     app.appendChild(el('<div class="banner ok"><div class="ico">'+I.check+'</div><div class="st">授权有效</div><div class="ds">以下人员为我司授权业务代表，请核对证件与本人一致</div></div>'));
   }
-
   app.appendChild(el(
     '<div class="card"><h3>授权代表信息</h3>'+
     '<div class="kv"><span class="k">姓　名</span><span class="v">'+esc(r.name)+'</span></div>'+
@@ -191,12 +160,7 @@ function render(){
     '<div class="kv"><span class="k">授权区域</span><span class="v">'+esc(r.region)+'</span></div>'+
     '<div class="kv"><span class="k">签发日期</span><span class="v">'+esc(r.issue)+'</span></div>'+
     '<div class="kv"><span class="k">有效期</span><span class="v">'+esc(r.valid)+'</span></div></div>'));
-
-  app.appendChild(el(
-    '<div class="card"><h3>授权范围</h3><ul class="scope">'+
-    r.scope.map(function(s){return '<li>'+esc(s)+'</li>';}).join('')+'</ul></div>'));
-
-  /* 资质与凭证 */
+  app.appendChild(el('<div class="card"><h3>授权范围</h3><ul class="scope">'+r.scope.map(function(s){return '<li>'+esc(s)+'</li>';}).join('')+'</ul></div>'));
   var docsHtml='<div class="card"><h3>资质与凭证（点击查看大图）</h3>';
   var allCount=0;
   DOCS.forEach(function(g){
@@ -208,33 +172,22 @@ function render(){
   });
   docsHtml+='</div>';
   app.appendChild(el(docsHtml));
-
   app.appendChild(el(
     '<div class="card notice"><h3>重要提示（请务必知悉）</h3>'+
     '<p>1. 购售电合同（零售套餐）以<b>江苏电力交易平台电子合同</b>或经我司盖章文本为准，经平台绑定确认后生效；</p>'+
     '<p>2. 我司<b>未授权任何个人收取电费、保证金、服务费</b>等费用，请勿向个人账户付款；</p>'+
     '<p>3. 任何<b>口头电价、电量承诺均不代表我司，均属无效</b>。</p></div>'));
-
   app.appendChild(el(
     '<div class="card"><h3>我司资质</h3>'+
     '<div class="kv"><span class="k">信用代码</span><span class="v">'+esc(COMPANY.code)+'</span></div>'+
     '<div class="kv"><span class="k">市场注册</span><span class="v">'+esc(COMPANY.reg)+'</span></div></div>'));
-
   foot(app);
   bindDocs();
 }
-function foot(app){
-  app.appendChild(el('<div class="foot"><p class="seal">中盛（镇江）新能源有限公司</p><p>本页面为授权信息官方核验结果，可作为业务接洽核实依据<br>请通过正规渠道办理相关业务</p></div>'));
-}
-
-/* ===== 灯箱逻辑 ===== */
+function foot(app){ app.appendChild(el('<div class="foot"><p class="seal">中盛（镇江）新能源有限公司</p><p>本页面为授权信息官方核验结果，可作为业务接洽核实依据<br>请通过正规渠道办理相关业务</p></div>')); }
 var ALL=[]; DOCS.forEach(function(g){g.items.forEach(function(it){ALL.push(it);});});
 var lb=document.getElementById("lb"), lbIdx=0;
-function bindDocs(){
-  Array.prototype.forEach.call(document.querySelectorAll(".doc-item"),function(b){
-    b.addEventListener("click",function(){openLB(parseInt(b.getAttribute("data-i"),10));});
-  });
-}
+function bindDocs(){ Array.prototype.forEach.call(document.querySelectorAll(".doc-item"),function(b){ b.addEventListener("click",function(){openLB(parseInt(b.getAttribute("data-i"),10));}); }); }
 function openLB(i){lbIdx=i;renderLB();lb.hidden=false;document.body.style.overflow="hidden";}
 function closeLB(){lb.hidden=true;document.body.style.overflow="";}
 function renderLB(){
@@ -250,20 +203,10 @@ document.getElementById("lb-x").addEventListener("click",closeLB);
 document.getElementById("lb-prev").addEventListener("click",function(){if(lbIdx>0){lbIdx--;renderLB();}});
 document.getElementById("lb-next").addEventListener("click",function(){if(lbIdx<ALL.length-1){lbIdx++;renderLB();}});
 lb.addEventListener("click",function(e){if(e.target===lb||e.target.classList.contains("lb-mid"))closeLB();});
-/* 触摸左右滑动切换 */
 var tx0=null;
 lb.addEventListener("touchstart",function(e){tx0=e.touches[0].clientX;},{passive:true});
-lb.addEventListener("touchend",function(e){
-  if(tx0===null)return; var dx=e.changedTouches[0].clientX-tx0;
-  if(Math.abs(dx)>48){if(dx<0&&lbIdx<ALL.length-1){lbIdx++;renderLB();}if(dx>0&&lbIdx>0){lbIdx--;renderLB();}}
-  tx0=null;
-},{passive:true});
-document.addEventListener("keydown",function(e){
-  if(lb.hidden)return;
-  if(e.key==="Escape")closeLB();
-  if(e.key==="ArrowLeft"&&lbIdx>0){lbIdx--;renderLB();}
-  if(e.key==="ArrowRight"&&lbIdx<ALL.length-1){lbIdx++;renderLB();}
-});
+lb.addEventListener("touchend",function(e){ if(tx0===null)return; var dx=e.changedTouches[0].clientX-tx0; if(Math.abs(dx)>48){if(dx<0&&lbIdx<ALL.length-1){lbIdx++;renderLB();}if(dx>0&&lbIdx>0){lbIdx--;renderLB();}} tx0=null; },{passive:true});
+document.addEventListener("keydown",function(e){ if(lb.hidden)return; if(e.key==="Escape")closeLB(); if(e.key==="ArrowLeft"&&lbIdx>0){lbIdx--;renderLB();} if(e.key==="ArrowRight"&&lbIdx<ALL.length-1){lbIdx++;renderLB();} });
 window.addEventListener("hashchange",render);
 render();
 </script>
